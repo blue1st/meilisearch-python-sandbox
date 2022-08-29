@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v0.28
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=MASTER_KEY
+    volumes:
+      - $PWD/meili_data:/meili_data
+    command:
+      - meilisearch 
+      - --env=development
+  app:
+    depends_on:
+      - meilisearch
+    build: ./
+    volumes: 
+      - $PWD/app:/app
+    working_dir: /app
+    command:
+      - python
+      - app.py
